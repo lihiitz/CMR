@@ -1,13 +1,26 @@
-import React, { Component } from 'react';
+import React, {useEffect } from 'react';
 import './App.css';
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
+import { BrowserRouter as Router } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import ClientsPage from './components/Clients/ClientsPage';
 
-@observer
-class App extends Component {
-  render(){
+
+const App = inject('company')(observer((props) => {
+  useEffect(() => {
+    async function fetchData(){
+      await props.company.getClients()
+    }
+    fetchData()
+  }, [])
+
   return (
-    <p>This template was created in 15.06.20 11:58 By Ananas</p>
-  )}
-}
+    <Router>
+      <Navbar />
+      <ClientsPage />
+    </Router>
+  )
+}))
+
 
 export default App;
