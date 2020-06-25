@@ -21,7 +21,7 @@ const SearchClient = inject("company")(observer((props) => {
     const handleSearch = function (e) {
         let temp = [...props.company.clients]
         if (e.target.value !== ""){
-            temp = temp.filter(c => c.name.toLowerCase().includes(e.target.value.toLowerCase()))
+            temp = temp.filter(c => c[select].toLowerCase().includes(e.target.value.toLowerCase()))
         }else{
             temp = []
         }
@@ -42,10 +42,7 @@ const SearchClient = inject("company")(observer((props) => {
                 value={search}
                 placeholder="search"
                 onChange={handleSearch}
-                fullWidth
             />
-            <br></br>
-
 
             <Select
                 value={select}
@@ -56,7 +53,7 @@ const SearchClient = inject("company")(observer((props) => {
             >
                 <MenuItem value="name"><em>Name</em></MenuItem>
                 <MenuItem value="country">Country</MenuItem>
-                <MenuItem value="owner">Owner</MenuItem>
+                <MenuItem value="employee">Owner</MenuItem>
             </Select>
         </div>
     )
