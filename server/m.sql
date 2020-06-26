@@ -34,15 +34,17 @@ use sql_intro;
 -- DELETE FROM Email_type;
 -- DELETE FROM Country;
 
+-- SELECT * FROM Employee;
+-- SELECT * FROM Client;
+-- SELECT * FROM Country;
+-- SELECT * FROM Email_type;
+
+-- SELECT * FROM Client WHERE name = "Lihi itzkovich";
+-- SELECT * FROM Email_type;
 SELECT * FROM Employee;
-SELECT * FROM Client;
-SELECT * FROM Country;
-SELECT * FROM Email_type;
-
--- SELECT * FROM Employee WHERE name = "book yeledik";
--- SELECT * FROM Client WHERE name = "Lihi Itzkovich";
--- DELETE FROM Client WHERE name = "Lihi Itzkovich";
-
+-- DELETE FROM Employee WHERE id = 30;
+-- DELETE FROM Client WHERE name = "lihi itzkovich";
+-- DELETE FROM Client WHERE name = "mai berlad";
 -- DROP TABLE Client;
 -- DROP TABLE Employee;
 -- DROP TABLE Email_type;

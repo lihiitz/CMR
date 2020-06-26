@@ -25,9 +25,20 @@ const getOwner = async function (employee) {
     return ownerID
 }
 
+const getEmailTypeId = async function (emailType) {
+    let emailTypeId = await sequelize.query(`SELECT id FROM Email_type WHERE type = '${emailType}'`)
+    if (!emailTypeId[0].length) {
+        emailTypeId = await sequelize.query(`INSERT INTO Email_type VALUES(null, '${emailType}')`)
+        emailTypeId = emailTypeId[0]
+    } else {
+        emailTypeId = emailTypeId[0][0].id
+    }
+    return emailTypeId
+}
+
 router.get('/owners', async function(req, res){
     let owners = await sequelize.query(`SELECT name FROM Employee`)
-    return owners[0]
+    res.send(owners[0])
 })
 
 router.put('/client/:id', async function (req, res) {
@@ -37,11 +48,32 @@ router.put('/client/:id', async function (req, res) {
     res.send(clientID)
 })
 
+router.put('/owner/:clientId', async function (req, res) {
+    const clientId = +req.params.clientId
+    const ownerID = await getOwner(req.body.ownerName)
+    const response = await sequelize.query(`UPDATE Client SET employee = ${ownerID} WHERE id = ${clientId}`)
+    res.send({ownerID})
+})
+
+router.put('/emailType/:clientId', async function (req, res) {
+    const clientId = +req.params.clientId
+    const emailType = req.body.emailType
+    const emailTypeId = await getEmailTypeId(emailType)
+    const response = await sequelize.query(`UPDATE Client SET email_type = ${emailTypeId} WHERE id = ${clientId}`)
+    res.send({emailTypeId})
+})
+
+router.put('/sold/:clientId', async function (req, res) {
+    const clientId = req.params.clientId
+    const response = await sequelize.query(`UPDATE Client SET sold = ${req.body.sold} WHERE id = '${clientId}'`)
+    res.send(response)
+})
+
 router.post('/client', async function (req, res) {    
     const obj = req.body
     const countryID = await getCountry(obj.country)
     const ownerID = await getOwner(obj.owner)
-    const clientID = await sequelize.query(`INSERT INTO Client VALUES(null, '${obj.name}', '${obj.email}', null, ${countryID}, ${ownerID}, 0, '${obj.date}')`)
+    const clientID = await sequelize.query(`INSERT INTO Client VALUES(null, '${obj.name}', '${obj.emailAdd}', null, ${countryID}, ${ownerID}, 0, '${obj.date}')`)
     res.send({clientID: clientID[0], countryID, ownerID})
 })
 
@@ -58,7 +90,7 @@ router.get('/clients', async function (req, res) {
             id: client.id,
             name: client.name,
             email_add: client.email_add,
-            email_type: emailType[0][0] ? emailType[0][0].type : null,
+            email_type: emailType[0][0] ? emailType[0][0].type : "null",
             country: country[0][0].name,
             employee: owner[0][0].name,
             sold: client.sold,

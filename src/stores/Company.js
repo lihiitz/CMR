@@ -6,7 +6,7 @@ import {Client} from "../stores/Client";
 export class Company{
     @observable clients = []
     @observable filteredClients = []
-    // @observable owners = []
+    @observable owners = []
 
     @computed get clientsLen () {
         return this.clients.length
@@ -14,8 +14,7 @@ export class Company{
 
     @action getOwners = async() => {
         const temp = await Axios.get(`http://localhost:3001/owners`)
-        // this.owners = temp.data
-        debugger
+        this.owners = temp.data
         return temp.data
     }
 
@@ -24,12 +23,12 @@ export class Company{
         this.clients = temp.data.map(c => new Client(c.id, c.name, c.email_add, c.email_type, c.country, c.employee, c.sold, c.firstContact))
     }
 
-    @action addClient = async (name, country, owner, email) => {
+    @action addClient = async (name, country, owner, emailAdd) => {
         let date = Date()
         date = date.slice(0, 10)
-        let client = await Axios.post('http://localhost:3001/client', {name, country,  owner, email, date})
+        let client = await Axios.post('http://localhost:3001/client', {name, country,  owner, emailAdd, date})
         client = client.data
-        const newClient = new Client(client.clientID, name, email, "null", country, owner, 0, date)
+        const newClient = new Client(client.clientID, name, emailAdd, "null", country, owner, 0, date)
         this.clients.push(newClient)
     }
 

@@ -29,5 +29,20 @@ export class Client{
         this.name = fullName
         this.country = country
     }
+
+    @action updateClientOwner = async (newOwnerName) => {
+        const temp = await Axios.put(`http://localhost:3001/owner/${this.id}`, {ownerName: newOwnerName})
+        this.employee = newOwnerName
+    }
+
+    @action updateClientEmailType = async (newType) => {
+        const temp = await Axios.put(`http://localhost:3001/emailType/${this.id}`, {emailType: newType})
+        this.emailType = newType
+    }
+        
+    @action updateSold = async (sold) => {
+        const temp = await Axios.put(`http://localhost:3001/sold/${this.id}`, {sold})
+        this.sold = sold
+    }
 }
 

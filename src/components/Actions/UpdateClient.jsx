@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, Typography, CardActions, Button, makeStyles, Input, Snackbar, FormControl, MenuItem, Select } from '@material-ui/core';
+import { Card, CardContent, Typography, CardActions, Button, makeStyles, Input, Snackbar, FormControl, MenuItem, Select, Paper, Grid } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -25,19 +25,22 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UpdateClient = inject("company")(observer((props) => {
-    let owners = []
+    const classes = useStyles()
+    const company = props.company
+    let [open, setOpen] = useState(false)
+    const [select, setSelect] = useState({
+        owner : "",
+        emailType : ""
+    })
+    const [clientName, setClientName] = useState("")
+
     useEffect(() => {
-        async function fetchData(){
-          owners = await props.company.getOwners()
+        async function fetchData() {
+           await company.getOwners()
+           setSelect({owner : company.owners[0].name, emailType : "A"})
         }
         fetchData()
-        // debugger
-      },[])
-
-    // debugger
-    let [open, setOpen] = useState(false)
-    const classes = useStyles()
-    const [clientName, setClientName] = useState("")
+    }, [])
 
     const handleClose = (e, reason) => {
         if (reason === 'clickaway') {
@@ -46,13 +49,41 @@ const UpdateClient = inject("company")(observer((props) => {
         setOpen(false)
     }
 
-    const addClientClick = function () {
-        // const name = client.fName + " " + client.sName
-        // props.company.addClient(name, client.country, client.owner, client.email)
+    const transferOwnerClick = () => {
+        const client = company.clients.find(c => c.name.toLowerCase() === clientName.toLocaleLowerCase())
+        if (!client){
+            alert("invalid client name. please insert full name")
+        }else{
+            client.updateClientOwner(select.owner)
+        }
+    }
+
+    const saleClick = () => {
+        const client = company.clients.find(c => c.name.toLowerCase() === clientName.toLocaleLowerCase())
+        if (!client){
+            alert("invalid client name. please insert full name")
+        }else{
+            client.updateSold(1)
+        }
+    }
+
+    const emailUpdateClick = () => {
+        const client = company.clients.find(c => c.name.toLowerCase() === clientName.toLocaleLowerCase())
+        if (!client){
+            alert("invalid client name. please insert full name")
+        }else{
+            client.updateClientEmailType(select.emailType)
+        }
     }
 
     const handleChange = function (e) {
         setClientName(e.target.value)
+    }
+
+    const handleSelect = function (e) {
+        let temp = {...select}
+        temp[e.target.name] = e.target.value
+        setSelect(temp)
     }
 
     return (
@@ -72,33 +103,41 @@ const UpdateClient = inject("company")(observer((props) => {
                 <br></br>
         Transfer ownership to
         <Select
-                    value={""}
-                    onChange={""}
+                    value={select.owner}
+                    name="owner"
+                    onChange={handleSelect}
                     displayEmpty
                     className={classes.selectEmpty}
                     inputProps={{ 'aria-label': 'Without label' }}
                 >
-                    {owners.map(o => (
-                    <MenuItem value={`{${o}}`}>{o}</MenuItem>
+                    {company.owners.map(o => (
+                        <MenuItem value={`${o.name}`}>{o.name}</MenuItem>
                     ))}
                 </Select>
+                <Button variant="contained" color="secondary" onClick={transferOwnerClick}>TRANSFER</Button>
+<br></br>
+Update Email Type:
+        <Select
+                    value={select.emailType}
+                    name="emailType"
+                    onChange={handleSelect}
+                    displayEmpty
+                    className={classes.selectEmpty}
+                    inputProps={{ 'aria-label': 'Without label' }}
+                >
+                    <MenuItem value="A"><em>A</em></MenuItem>
+                    <MenuItem value="B">B</MenuItem>
+                    <MenuItem value="C">C</MenuItem>
+                    <MenuItem value="D">D</MenuItem>
+                    <MenuItem value="null">null</MenuItem>
+
+                </Select>
+                <Button variant="contained" color="secondary" onClick={emailUpdateClick}>SEND</Button>
+<br></br>
+declare sale!
+<Button variant="contained" color="secondary" onClick={saleClick}>DECLARE</Button>
 
             </CardContent>
-            <CardActions>
-                <FormControl className={classes.margin}>
-                    <Snackbar
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left'
-                        }}
-                        open={open}
-                        autoHideDuration={2000}
-                        onClose={handleClose}
-                        message="operation completed"
-                    />
-                    <Button variant="contained" color="secondary" onClick={addClientClick}>Add New Client</Button>
-                </FormControl>
-            </CardActions>
         </Card>
     )
 }))
