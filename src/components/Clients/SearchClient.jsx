@@ -31,6 +31,8 @@ const SearchClient = inject("company")(observer((props) => {
 
     const handleSelect = function (e) {
         setSelect(e.target.value)
+        e.target.value = ""
+        handleSearch(e)
     }
 
     return (

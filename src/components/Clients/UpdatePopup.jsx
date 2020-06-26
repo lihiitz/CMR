@@ -21,7 +21,7 @@ const UpdatePopup = inject("company")(observer((props) => {
     return (
       <div>
         <Dialog open={props.open} onClose={() => {props.click(false)}} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">Update</DialogTitle>
           <DialogContent>
             <Input
               autoFocus
