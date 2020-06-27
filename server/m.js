@@ -40,7 +40,8 @@ const getClient = async function(obj, emailType, country, employee){
     let sold = obj.sold ? 1 : 0
     let clientID = await sequelize.query(`SELECT * FROM Client WHERE name = '${obj.name}'`)
     if (!clientID[0].length){
-        clientID = await sequelize.query(`INSERT INTO Client VALUES(null, '${obj.name}', '${obj.email}', '${emailType}', '${country}', '${employee}', '${sold}', '${obj.firstContact}')`)
+        const date = obj.firstContact.slice(0, 10)
+        clientID = await sequelize.query(`INSERT INTO Client VALUES(null, '${obj.name}', '${obj.email}', '${emailType}', '${country}', '${employee}', '${sold}', '${date}')`)
         clientID = clientID[0]
     }else{
         clientID = clientID[0][0].id

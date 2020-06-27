@@ -29,6 +29,7 @@ use sql_intro;
 --     FOREIGN KEY(country) REFERENCES Country(id),
 --     FOREIGN KEY(employee) REFERENCES Employee(id)
 -- );
+
 -- DELETE FROM Client;
 -- DELETE FROM Employee;
 -- DELETE FROM Email_type;
@@ -39,7 +40,9 @@ use sql_intro;
 -- SELECT * FROM Country;
 -- SELECT * FROM Email_type;
 
--- SELECT * FROM Client WHERE name = "Lihi itzkovich";
+-- INSERT INTO Country VALUES(8, "Israel");
+-- INSERT INTO Client VALUES(null, "Lihi Itzkovich", "lihiitz@gmail.com", 1, 8, 1, 1, "2020-06-27")
+-- DELETE FROM Client WHERE name = "Lihi itzkovich";
 -- SELECT * FROM Email_type;
 -- SELECT * FROM Employee;
 -- SELECT  country, COUNT(sold) FROM Client WHERE sold = 1 GROUP BY country;
@@ -48,6 +51,7 @@ use sql_intro;
 -- DELETE FROM Employee WHERE id = 30;
 -- DELETE FROM Client WHERE name = "lihi itzkovich";
 -- DELETE FROM Client WHERE name = "mai berlad";
+
 -- DROP TABLE Client;
 -- DROP TABLE Employee;
 -- DROP TABLE Email_type;

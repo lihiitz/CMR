@@ -18,9 +18,22 @@ export class Company{
         this.clients = temp.data.map(c => new Client(c.id, c.name, c.email_add, c.email_type, c.country, c.employee, c.sold, c.firstContact))
     }
 
+    formatDate = date => {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-')
+    }
+
     @action addClient = async (name, country, owner, emailAdd) => {
-        let date = Date()
-        date = date.slice(0, 10)
+        let date = this.formatDate(new Date())
         let client = await Axios.post('http://localhost:3001/client', {name, country,  owner, emailAdd, date})
         client = client.data
         const newClient = new Client(client.clientID, name, emailAdd, "null", country, owner, 0, date)
