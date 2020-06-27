@@ -28,11 +28,11 @@ const UpdateClient = inject("company")(observer((props) => {
     const classes = useStyles()
     const company = props.company
     let [open, setOpen] = useState(false)
+    const [clientName, setClientName] = useState("")
     const [select, setSelect] = useState({
         owner : "",
         emailType : ""
     })
-    const [clientName, setClientName] = useState("")
 
     useEffect(() => {
         async function fetchData() {

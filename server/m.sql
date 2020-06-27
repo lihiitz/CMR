@@ -41,7 +41,10 @@ use sql_intro;
 
 -- SELECT * FROM Client WHERE name = "Lihi itzkovich";
 -- SELECT * FROM Email_type;
-SELECT * FROM Employee;
+-- SELECT * FROM Employee;
+-- SELECT  country, COUNT(sold) FROM Client WHERE sold = 1 GROUP BY country;
+-- SELECT country FROM Client GROUP BY country;
+
 -- DELETE FROM Employee WHERE id = 30;
 -- DELETE FROM Client WHERE name = "lihi itzkovich";
 -- DELETE FROM Client WHERE name = "mai berlad";

@@ -3,6 +3,25 @@ const router = express.Router()
 const Sequelize = require('sequelize')
 const sequelize = new Sequelize('mysql://root:@localhost/sql_intro')
 
+const getCountryName = async function(countryId){
+    let countryName = await sequelize.query(`SELECT name FROM Country WHERE id = ${countryId}`)
+    if (countryName[0].length){
+        return countryName[0][0].name
+    }else{
+        return null
+    }
+}
+
+const getMax = function(arr){
+    let max = arr[0]
+    arr.forEach(element => {
+      if (element.sold > max.sold){
+          max = element
+      }
+    })
+    return max
+}
+
 const getCountry = async function (country) {
     let countryID = await sequelize.query(`SELECT id FROM Country WHERE name = '${country}'`)
     if (!countryID[0].length) {
@@ -39,6 +58,16 @@ const getEmailTypeId = async function (emailType) {
 router.get('/owners', async function(req, res){
     let owners = await sequelize.query(`SELECT name FROM Employee`)
     res.send(owners[0])
+})
+
+router.get('/hottestCountry', async function(req, res){
+    let countryName = ""
+    let q = await sequelize.query(`SELECT country, COUNT(sold) sold FROM Client WHERE sold = 1 GROUP BY country`)
+    if (q[0].length){
+        const max = getMax(q[0])
+        countryName = await getCountryName(max.country)
+    }
+    res.send(countryName)
 })
 
 router.put('/client/:id', async function (req, res) {

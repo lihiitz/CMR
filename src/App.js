@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import ClientsPage from './components/Clients/ClientsPage';
 import ActionsPage from './components/Actions/ActionsPage';
 import {Client} from './stores/Client'
+import AnalyticsPage from './components/Analytics/AnalyticsPage';
 
 const App = inject('company')(observer((props) => {
   useEffect(() => {
@@ -20,6 +21,7 @@ const App = inject('company')(observer((props) => {
       <Navbar />
       <Route path="/clients" exact component={ClientsPage}/>
       <Route path="/actions" exact render={() => <ActionsPage/>}/>
+      <Route path="/analytics" exact component={AnalyticsPage}/>
     </Router>
   )
 }))

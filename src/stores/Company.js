@@ -7,15 +7,10 @@ export class Company{
     @observable clients = []
     @observable filteredClients = []
     @observable owners = []
+    @observable hottestCountry = ""
 
     @computed get clientsLen () {
         return this.clients.length
-    }
-
-    @action getOwners = async() => {
-        const temp = await Axios.get(`http://localhost:3001/owners`)
-        this.owners = temp.data
-        return temp.data
     }
 
     @action getClients = async() => {
@@ -30,6 +25,18 @@ export class Company{
         client = client.data
         const newClient = new Client(client.clientID, name, emailAdd, "null", country, owner, 0, date)
         this.clients.push(newClient)
+    }
+
+    @action getOwners = async() => {
+        const temp = await Axios.get(`http://localhost:3001/owners`)
+        this.owners = temp.data
+        // return temp.data
+    }
+
+    @action getHottestCountry = async () => {
+        const temp = await Axios.get('http://localhost:3001/hottestCountry')
+        this.hottestCountry = temp.data
+        // return temp.data
     }
 
 }
